@@ -62,6 +62,11 @@ class machine {
     void run(instruction i) {
         uint opcode = i.get_OP();
         switch (opcode) {
+            case 0:
+                if (!get_C_register(i)) {
+                    set_A_register(i, get_B_register(i));
+                }
+                break;
             case 8: set_B_register(i, allocate(get_C_register(i))); break;
             case 9: deallocate(get_C_register(i)); break;
         }
