@@ -107,9 +107,25 @@ class machine {
 
                 set_A_register(i, ~(get_B_register(i) & get_C_register(i)));
             } break;
-            case 7: return false;
-            case 8: set_B_register(i, allocate(get_C_register(i))); break;
-            case 9: deallocate(get_C_register(i)); break;
+            case 7:
+                // The machine stops computation
+                return false;
+            case 8:
+                // A new array is created; the value in the register C gives the
+                // number
+                // of words in the new array. This new array is
+                // zero-initialized. A bit pattern not consisting of exclusively
+                // the 0 bit, and that identifies no other active allocated
+                // array, is placed in the B register, and it identifies the new
+                // array.
+                set_B_register(i, allocate(get_C_register(i)));
+                break;
+            case 9:
+                // The array identified by the register C is deallocated
+                // (freed). Future
+                // allocations may then reuse that identifier.
+                deallocate(get_C_register(i));
+                break;
             case 10: {
                 // Output. The value in the register C is displayed on the
                 // console. Only values in the range 0–255 are allowed.
