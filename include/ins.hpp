@@ -10,7 +10,7 @@ constexpr uint get_section_of_bits(uint input) {
     uint mask = (1 << num_to_get) - 1;
     return (input >> start) & mask;
 }
-struct ins {
+struct instruction {
     uint code = 0;
 
     constexpr uint get_OP() const {
@@ -28,5 +28,5 @@ struct ins {
 };
 
 
-static_assert(ins{ 0xf0000000u}.get_OP() == 0xf, "get_OP() not working");
+static_assert(instruction{ 0xf0000000u}.get_OP() == 0xf, "get_OP() not working");
 }
