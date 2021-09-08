@@ -3,6 +3,7 @@
 #include <array>
 #include <ins.hpp>
 #include <vector>
+#include <fmt/core.h>
 
 namespace compiler {
 
@@ -59,7 +60,7 @@ class machine {
         registers[i.get_C()] = value;
     }
 
-    void run(instruction i) {
+    bool run(instruction i) {
         uint opcode = i.get_OP();
         switch (opcode) {
             case 0:
@@ -67,12 +68,49 @@ class machine {
                     set_A_register(i, get_B_register(i));
                 }
                 break;
-            case 3: set_A_register(i, (get_B_register(i) + get_C_register(i))); break;
-            case 4: set_A_register(i, (get_B_register(i) * get_C_register(i))); break;
-            case 5: set_A_register(i, (get_B_register(i) / get_C_register(i))); break;
+            case 1: {
+                // Opcode 1: The register A receives the value stored at offset
+                // in
+                // register C in the array identified by B.
+                uint offset = get_C_register(i);
+                uint array_index = get_B_register(i);
+                set_A_register(i, arrays[array_index][offset]);
+            } break;
+            case 2: {
+                // The array identified by A is updated at the offset in
+                // register B to store the value in register C
+                uint array_index = get_A_register(i);
+                uint offset = get_B_register(i);
+                set_C_register(i, arrays[array_index][offset]);
+            } break;
+            case 3:
+                // The register A receives the value in register B plus the
+                // value in register C, modulo 2^32.
+                set_A_register(i, (get_B_register(i) + get_C_register(i)));
+                break;
+            case 4:
+                // The register A receives the value in register B times the
+                // value in register C, modulo 2^32
+                set_A_register(i, (get_B_register(i) * get_C_register(i)));
+                break;
+            case 5:
+                // The register A receives the value in register B divided by
+                // the value in register C, where each quantity is treated as an
+                // unsigned 32-bit number
+                set_A_register(i, (get_B_register(i) / get_C_register(i)));
+                break;
+            case 6: {
+                // Each bit in the register A receives the 1 bit if either
+                // register B or register C has a 0 bit in that position.
+                // Otherwise the bit in register A receives the 0 bit.
+
+                set_A_register(i, ~(get_B_register(i) & get_C_register(i)));
+            } break;
+            case 7: return false;
             case 8: set_B_register(i, allocate(get_C_register(i))); break;
             case 9: deallocate(get_C_register(i)); break;
         }
+        return true;
     }
 };
 } // namespace compiler
