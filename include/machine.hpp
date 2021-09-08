@@ -14,17 +14,16 @@ struct new_state {
     uint counter = 0;
     bool halted = false;
 
-    operator bool() const {
-        return !halted;
-    }
+    operator bool() const { return !halted; }
 };
 
-constexpr new_state halt_state = new_state{0, true};
+constexpr new_state halt_state = new_state {0, true};
 
 class machine {
     array_space arrays;
     std::vector<uint> deallocated;
     std::array<uint, 8> registers {};
+
    public:
     machine() = default;
 
@@ -70,8 +69,11 @@ class machine {
     void set_C_register(instruction i, uint value) {
         registers[i.get_C()] = value;
     }
-
-    new_state run(instruction i, uint counter) {
+    instruction get_instruction(uint counter) {
+        return instruction {arrays[0][counter]};
+    }
+    new_state run(uint counter) {
+        instruction i = get_instruction(counter);
         uint opcode = i.get_OP();
         switch (opcode) {
             case 0:
@@ -162,10 +164,17 @@ class machine {
 
                 uint array_index = get_B_register(i);
                 arrays[0] = arrays[array_index];
-                return new_state{get_C_register(i), false};
+                return new_state {get_C_register(i), false};
             } break;
         }
-        return new_state{counter + 1, false};
+        return new_state {counter + 1, false};
+    }
+
+    void run_loop(uint initial_counter = 0) {
+        uint counter = initial_counter;
+        while (new_state state = run(counter)) {
+            counter = state.counter;
+        }
     }
 };
 } // namespace compiler
