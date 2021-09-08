@@ -7,14 +7,24 @@
 #include <vector>
 
 namespace compiler {
-
 using word_array = std::vector<uint>;
 using array_space = std::vector<word_array>;
+
+struct new_state {
+    uint counter = 0;
+    bool halted = false;
+
+    operator bool() const {
+        return !halted;
+    }
+};
+
+constexpr new_state halt_state = new_state{0, true};
+
 class machine {
     array_space arrays;
     std::vector<uint> deallocated;
     std::array<uint, 8> registers {};
-
    public:
     machine() = default;
 
@@ -61,7 +71,7 @@ class machine {
         registers[i.get_C()] = value;
     }
 
-    bool run(instruction i) {
+    new_state run(instruction i, uint counter) {
         uint opcode = i.get_OP();
         switch (opcode) {
             case 0:
@@ -109,7 +119,7 @@ class machine {
             } break;
             case 7:
                 // The machine stops computation
-                return false;
+                return halt_state;
             case 8:
                 // A new array is created; the value in the register C gives the
                 // number
@@ -143,8 +153,19 @@ class machine {
                     set_C_register(i, ~0u);
                 }
             } break;
+            case 12: {
+                // The array identified by the B register is duplicated and the
+                // duplicate replaces the ‘0’ array, regardless of size. The
+                // program counter is updated to indicate the word of this array
+                // that is described by the offset given in C, where the value 0
+                // denotes the first word, 1 the second, etc.
+
+                uint array_index = get_B_register(i);
+                arrays[0] = arrays[array_index];
+                return new_state{get_C_register(i), false};
+            } break;
         }
-        return true;
+        return new_state{counter + 1, false};
     }
 };
 } // namespace compiler
