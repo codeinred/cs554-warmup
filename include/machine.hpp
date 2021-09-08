@@ -1,9 +1,10 @@
 #pragma once
 
 #include <array>
-#include <ins.hpp>
-#include <vector>
 #include <fmt/core.h>
+#include <ins.hpp>
+#include <iostream>
+#include <vector>
 
 namespace compiler {
 
@@ -109,6 +110,23 @@ class machine {
             case 7: return false;
             case 8: set_B_register(i, allocate(get_C_register(i))); break;
             case 9: deallocate(get_C_register(i)); break;
+            case 10: {
+                // Output. The value in the register C is displayed on the
+                // console. Only values in the range 0–255 are allowed.
+                fmt::print("{}", char(get_C_register(i)));
+            } break;
+            case 11: {
+                // Input. The machine waits for input on the console. When input
+                // arrives, the register C is loaded with the input, which must
+                // be in the range 0–255. If the end of input has been signaled,
+                // then the register C is filled with all 1’s.
+                char c;
+                if (std::cin >> c) {
+                    set_C_register(i, c);
+                } else {
+                    set_C_register(i, ~0u);
+                }
+            } break;
         }
         return true;
     }
