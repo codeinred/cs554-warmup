@@ -2,6 +2,7 @@
 
 #include <array>
 #include <fmt/core.h>
+#include <formatting.hpp>
 #include <ins.hpp>
 #include <iostream>
 #include <vector>
@@ -81,6 +82,14 @@ class machine {
     }
     instruction get_instruction(uint counter) {
         return instruction {arrays[0][counter]};
+    }
+    void print_status(uint counter, instruction i) {
+        fmt::print(stderr, "{:<4}  ", counter);
+        fmt::print(stderr, "Ins: {:3}", i);
+        fmt::print(stderr, "  reg: {}", registers);
+        fmt::print(
+            stderr, "  arr: {}", std::vector(arrays.begin() + 1, arrays.end()));
+        fmt::print(stderr, "\n");
     }
     new_state run(uint counter) {
         instruction i = get_instruction(counter);
