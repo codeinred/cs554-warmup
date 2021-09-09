@@ -215,7 +215,7 @@ class machine {
             counter = state.counter;
 
             // If counter is at the end of the instruction array, halt
-            if (counter == arrays[0].size())
+            if (counter >= arrays[0].size())
                 break;
         }
     }
