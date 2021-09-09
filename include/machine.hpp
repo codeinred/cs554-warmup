@@ -60,6 +60,7 @@ class machine {
     uint get_A_register(instruction i) const { return registers[i.get_A()]; }
     uint get_B_register(instruction i) const { return registers[i.get_B()]; }
     uint get_C_register(instruction i) const { return registers[i.get_C()]; }
+
     void set_A_register(instruction i, uint value) {
         registers[i.get_A()] = value;
     }
@@ -68,6 +69,9 @@ class machine {
     }
     void set_C_register(instruction i, uint value) {
         registers[i.get_C()] = value;
+    }
+    void set_special_register(instruction i, uint value) const {
+        return registers[i.get_special()];
     }
     instruction get_instruction(uint counter) {
         return instruction {arrays[0][counter]};
@@ -165,6 +169,11 @@ class machine {
                 uint array_index = get_B_register(i);
                 arrays[0] = arrays[array_index];
                 return new_state {get_C_register(i), false};
+            } break;
+            case 13: {
+                // The value in bits 0:24 is loaded into the register A (given
+                // by bits 25:27)
+                set_special_register(i, i.get_special_value());
             } break;
         }
         return new_state {counter + 1, false};

@@ -22,6 +22,12 @@ struct instruction {
     constexpr uint get_A() const { return get_section_of_bits<6, 8>(code); }
     constexpr uint get_B() const { return get_section_of_bits<3, 5>(code); }
     constexpr uint get_C() const { return get_section_of_bits<0, 2>(code); }
+    constexpr uint get_special() const {
+        return get_section_of_bits<25, 27>(code);
+    }
+    constexpr uint get_special_value() const {
+        return get_section_of_bits<0, 24>(code);
+    }
 };
 
 
