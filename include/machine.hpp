@@ -70,8 +70,8 @@ class machine {
     void set_C_register(instruction i, uint value) {
         registers[i.get_C()] = value;
     }
-    void set_special_register(instruction i, uint value) const {
-        return registers[i.get_special()];
+    void set_special_register(instruction i, uint value) {
+        registers[i.get_special()] = value;
     }
     instruction get_instruction(uint counter) {
         return instruction {arrays[0][counter]};
