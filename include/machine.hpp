@@ -26,6 +26,14 @@ class machine {
 
    public:
     machine() = default;
+    /**
+     * @brief Construct a new machine object with the given program
+     *
+     * @param program the list of instructions this machine will execute
+     */
+    machine(word_array program) {
+        arrays.push_back(std::move(program));
+    }
 
     /**
      * @brief Allocation works by:
