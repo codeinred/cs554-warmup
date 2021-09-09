@@ -195,6 +195,10 @@ class machine {
         uint counter = initial_counter;
         while (new_state state = run(counter)) {
             counter = state.counter;
+
+            // If counter is at the end of the instruction array, halt
+            if (counter == arrays[0].size())
+                break;
         }
     }
 };
