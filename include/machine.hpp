@@ -31,9 +31,7 @@ class machine {
      *
      * @param program the list of instructions this machine will execute
      */
-    machine(word_array program) {
-        arrays.push_back(std::move(program));
-    }
+    machine(word_array program) { arrays.push_back(std::move(program)); }
 
     /**
      * @brief Allocation works by:
@@ -110,7 +108,7 @@ class machine {
 
                 uint array_index = get_A_register(i);
                 uint offset = get_B_register(i);
-                set_C_register(i, arrays[array_index][offset]);
+                arrays[array_index][offset] = get_C_register(i);
             } break;
             case 3:
                 // Opcode 3: The register A receives the value in register B
