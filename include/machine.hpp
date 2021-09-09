@@ -193,7 +193,10 @@ class machine {
                 // 1 the second, etc.
 
                 uint array_index = get_B_register(i);
-                arrays[0] = arrays[array_index];
+
+                if (array_index != 0)
+                    arrays[0] = arrays[array_index];
+
                 return new_state {get_C_register(i), false};
             } break;
             case 13: {
