@@ -10,5 +10,5 @@ mkdir -p "$project_root/build"
 cd "$project_root/build"
 
 # build project in $project_root/build
-cmake .. -DCMAKE_BUILD_TYPE=Release "${@}"
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-11 "${@}"
 cmake --build . --config Release
