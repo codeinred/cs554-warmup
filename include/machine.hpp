@@ -90,7 +90,9 @@ class machine {
                 // Opcode 0: The register A receives the value in register B,
                 // unless the register C contains 0.
 
-                if (!get_C_register(i)) {
+                if (get_C_register(i) == 0) {
+                    // do nothing
+                } else {
                     set_A_register(i, get_B_register(i));
                 }
                 break;
