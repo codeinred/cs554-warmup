@@ -81,77 +81,87 @@ class machine {
         uint opcode = i.get_OP();
         switch (opcode) {
             case 0:
+                // Opcode 0: The register A receives the value in register B,
+                // unless the register C contains 0.
+
                 if (!get_C_register(i)) {
                     set_A_register(i, get_B_register(i));
                 }
                 break;
             case 1: {
                 // Opcode 1: The register A receives the value stored at offset
-                // in
-                // register C in the array identified by B.
+                // in register C in the array identified by B.
+
                 uint offset = get_C_register(i);
                 uint array_index = get_B_register(i);
                 set_A_register(i, arrays[array_index][offset]);
             } break;
             case 2: {
-                // The array identified by A is updated at the offset in
-                // register B to store the value in register C
+                // Opcode 2: The array identified by A is updated at the offset
+                // in register B to store the value in register C
+
                 uint array_index = get_A_register(i);
                 uint offset = get_B_register(i);
                 set_C_register(i, arrays[array_index][offset]);
             } break;
             case 3:
-                // The register A receives the value in register B plus the
-                // value in register C, modulo 2^32.
+                // Opcode 3: The register A receives the value in register B
+                // plus the value in register C, modulo 2^32.
+
                 set_A_register(i, (get_B_register(i) + get_C_register(i)));
                 break;
             case 4:
-                // The register A receives the value in register B times the
-                // value in register C, modulo 2^32
+                // Opcode 4: The register A receives the value in register B
+                // times the value in register C, modulo 2^32
+
                 set_A_register(i, (get_B_register(i) * get_C_register(i)));
                 break;
             case 5:
-                // The register A receives the value in register B divided by
-                // the value in register C, where each quantity is treated as an
-                // unsigned 32-bit number
+                // Opcode 5: The register A receives the value in register B
+                // divided by the value in register C, where each quantity is
+                // treated as an unsigned 32-bit number
+
                 set_A_register(i, (get_B_register(i) / get_C_register(i)));
                 break;
             case 6: {
-                // Each bit in the register A receives the 1 bit if either
-                // register B or register C has a 0 bit in that position.
+                // Opcode 6: Each bit in the register A receives the 1 bit if
+                // either register B or register C has a 0 bit in that position.
                 // Otherwise the bit in register A receives the 0 bit.
 
                 set_A_register(i, ~(get_B_register(i) & get_C_register(i)));
             } break;
             case 7:
-                // The machine stops computation
+                // Opcode 7: The machine stops computation
                 return halt_state;
             case 8:
-                // A new array is created; the value in the register C gives the
-                // number
-                // of words in the new array. This new array is
+                // Opcode 8: A new array is created; the value in the register C
+                // gives the number of words in the new array. This new array is
                 // zero-initialized. A bit pattern not consisting of exclusively
                 // the 0 bit, and that identifies no other active allocated
                 // array, is placed in the B register, and it identifies the new
                 // array.
+
                 set_B_register(i, allocate(get_C_register(i)));
                 break;
             case 9:
-                // The array identified by the register C is deallocated
-                // (freed). Future
-                // allocations may then reuse that identifier.
+                // Opcode 9: The array identified by the register C is
+                // deallocated (freed). Future allocations may then reuse that
+                // identifier.
+
                 deallocate(get_C_register(i));
                 break;
             case 10: {
-                // Output. The value in the register C is displayed on the
-                // console. Only values in the range 0–255 are allowed.
+                // Opcode 10: Output. The value in the register C is displayed
+                // on the console. Only values in the range 0–255 are allowed.
+
                 fmt::print("{}", char(get_C_register(i)));
             } break;
             case 11: {
-                // Input. The machine waits for input on the console. When input
-                // arrives, the register C is loaded with the input, which must
-                // be in the range 0–255. If the end of input has been signaled,
-                // then the register C is filled with all 1’s.
+                // Opcode 11: Input. The machine waits for input on the console.
+                // When input arrives, the register C is loaded with the input,
+                // which must be in the range 0–255. If the end of input has
+                // been signaled, then the register C is filled with all 1’s.
+
                 char c;
                 if (std::cin >> c) {
                     set_C_register(i, c);
@@ -160,19 +170,21 @@ class machine {
                 }
             } break;
             case 12: {
-                // The array identified by the B register is duplicated and the
-                // duplicate replaces the ‘0’ array, regardless of size. The
-                // program counter is updated to indicate the word of this array
-                // that is described by the offset given in C, where the value 0
-                // denotes the first word, 1 the second, etc.
+                // Opcode 12: The array identified by the B register is
+                // duplicated and the duplicate replaces the ‘0’ array,
+                // regardless of size. The program counter is updated to
+                // indicate the word of this array that is described by the
+                // offset given in C, where the value 0 denotes the first word,
+                // 1 the second, etc.
 
                 uint array_index = get_B_register(i);
                 arrays[0] = arrays[array_index];
                 return new_state {get_C_register(i), false};
             } break;
             case 13: {
-                // The value in bits 0:24 is loaded into the register A (given
-                // by bits 25:27)
+                // Opcode 13: The value in bits 0:24 is loaded into the register
+                // A (given by bits 25:27)
+
                 set_special_register(i, i.get_special_value());
             } break;
         }
