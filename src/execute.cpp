@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
             stderr,
             "Missing filename. Usage: \n\n\t{} <filename>\n\n",
             argv[0]);
-        return 1;
+        return 0;
     }
 
     // Get the name of the file from the first argument
