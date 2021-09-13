@@ -15,6 +15,14 @@ project(${project_name} CXX)
 # We want to export compile commands b/c it's useful for ccls
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# If ALWAYS_FETCH is ON, then find_or_fetch will always fetch dependencies
+# Rather than using the ones provided by the system. This is useful for
+# Creating a static executable.
+option(
+    ALWAYS_FETCH
+    "Tells find_or_fetch to always fetch packages"
+    OFF)
+
 # Defines some useful constants representing terminal codes to print things
 # in color.
 if(NOT WIN32)
@@ -46,8 +54,11 @@ endfunction()
 # find_package. If it fails to find one, it'll use FetchContent to download and
 # build it locally.
 function(find_or_fetch package repo tag)
-    find_package(${package} QUIET)
-    if (NOT ${${package}_FOUND})
+    if (NOT ALWAYS_FETCH)
+        find_package(${package} QUIET)
+    endif()
+
+    if (ALWAYS_FETCH OR NOT ${${package}_FOUND})
         note("Fetching dependency '${package}' from ${repo}")
         include(FetchContent)
         FetchContent_Declare(
