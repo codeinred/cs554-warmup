@@ -67,12 +67,12 @@ int main(int argc, char** argv) {
     // Execute the file as a program if it exists.
     if (fs::exists(filename)) {
 
-        fmt::print("Loading '{}'\n", filename.c_str());
-
+        // fmt::print("Loading '{}'\n", filename.c_str());
+        // Load the machine from a file
         machine m = load_from_file(filename);
 
-        fmt::print("Running '{}'\n", filename.c_str());
-
+        // fmt::print("Running '{}'\n", filename.c_str());
+        // Run the machine
         m.run_loop();
     } else {
         fmt::print("Couldn't find '{}'\n", filename.c_str());
