@@ -181,7 +181,7 @@ class machine {
                 if (ch == EOF) {
                     set_C_register(i, ~0u);
                 } else {
-                    set_C_register(i, (unsigned char)(ch));
+                    set_C_register(i, uint(ch) & 0xffu);
                 }
             } break;
             case 12: {
