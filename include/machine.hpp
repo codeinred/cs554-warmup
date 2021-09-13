@@ -177,11 +177,11 @@ class machine {
                 // which must be in the range 0–255. If the end of input has
                 // been signaled, then the register C is filled with all 1’s.
 
-                char c;
-                if (std::cin >> c) {
-                    set_C_register(i, c);
-                } else {
+                int ch = std::cin.get();
+                if (ch == EOF) {
                     set_C_register(i, ~0u);
+                } else {
+                    set_C_register(i, (unsigned char)(ch));
                 }
             } break;
             case 12: {
