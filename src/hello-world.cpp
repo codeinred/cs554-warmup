@@ -1,11 +1,32 @@
-#include <fmt/core.h>
-#include <ins.hpp>
+#include <files.hpp>
 
-int main() {
+int main(int argc, char** argv) {
+
+    namespace fs = std::filesystem;
     using namespace compiler;
 
-    fmt::print("test.get_OP(): {}\n", instruction {0xf000'0000u}.get_OP());
-    fmt::print("test.get_A(): {}\n", instruction {0b111'000'000u}.get_A());
-    fmt::print("test.get_B(): {}\n", instruction {0b000'111'000u}.get_B());
-    fmt::print("test.get_C(): {}\n", instruction {0b000'000'111u}.get_C());
+    // Check that a filename was provided as input
+    if (argc == 1) {
+        fmt::print(
+            stderr,
+            "Missing filename. Usage: \n\n\t{} <filename>\n\n",
+            argv[0]);
+        return 0;
+    }
+
+    // Get the name of the file from the first argument
+    fs::path filename = argv[1];
+
+    // Execute the file as a program if it exists.
+    if (fs::exists(filename)) {
+
+        std::vector<uint> instructions =
+            read_words_from_bytes(read_all_bytes(filename));
+
+        for(uint i : instructions) {
+            fmt::print("{}\n", instruction{i});
+        }
+    } else {
+        fmt::print("Couldn't find '{}'\n", filename.c_str());
+    }
 }
