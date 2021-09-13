@@ -173,3 +173,6 @@ if(PROJECT_IS_TOP_LEVEL)
     # add_source_dir(bench ${libname} benchmark)
     # add_test_dir(test ${libname} fmt)
 endif()
+
+# Add install target for execute
+install(TARGETS execute RUNTIME DESTINATION bin)
