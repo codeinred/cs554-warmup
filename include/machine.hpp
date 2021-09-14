@@ -34,7 +34,11 @@ class machine {
      *
      * @param program the list of instructions this machine will execute
      */
-    machine(word_array program) { arrays.push_back(std::move(program)); }
+    machine(word_array program) {
+        arrays.push_back(std::move(program));
+        // Ensure there's an extra value padding the end
+        arrays[0].push_back(0);
+    }
 
     /**
      * @brief Allocation works by:
@@ -86,23 +90,23 @@ class machine {
         uint counter = 0;
         uint const* instruction_ptr = arrays[0].data();
         for (;;) {
-            instruction i = instruction {instruction_ptr[counter++]};
-            uint opcode = i.get_OP();
+            instruction i1 = instruction {instruction_ptr[counter++]};
+            uint opcode = i1.get_OP();
             switch (opcode) {
-                case 0: OPCODE_0(i); break;
-                case 1: OPCODE_1(i); break;
-                case 2: OPCODE_2(i); break;
-                case 3: OPCODE_3(i); break;
-                case 4: OPCODE_4(i); break;
-                case 5: OPCODE_5(i); break;
-                case 6: OPCODE_6(i); break;
-                case 7: OPCODE_7(i); break;
-                case 8: OPCODE_8(i); break;
-                case 9: OPCODE_9(i); break;
-                case 10: OPCODE_10(i); break;
-                case 11: OPCODE_11(i); break;
-                case 12: OPCODE_12(i); break;
-                case 13: OPCODE_13(i); break;
+                case 0: OPCODE_0(i1); break;
+                case 1: OPCODE_1(i1); break;
+                case 2: OPCODE_2(i1); break;
+                case 3: OPCODE_3(i1); break;
+                case 4: OPCODE_4(i1); break;
+                case 5: OPCODE_5(i1); break;
+                case 6: OPCODE_6(i1); break;
+                case 7: OPCODE_7(i1); break;
+                case 8: OPCODE_8(i1); break;
+                case 9: OPCODE_9(i1); break;
+                case 10: OPCODE_10(i1); break;
+                case 11: OPCODE_11(i1); break;
+                case 12: OPCODE_12(i1); break;
+                case 13: OPCODE_13(i1); break;
             }
         }
     }

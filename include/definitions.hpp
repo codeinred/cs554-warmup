@@ -107,14 +107,20 @@
 // indicate the word of this array that is described by the
 // offset given in C, where the value 0 denotes the first
 // word, 1 the second, etc.
+
+// NB: We add one padding op at the end in order to allow operations to be
+// grouped together. This enables batching of instructions
+
 #define OPCODE_12(INS)                                                         \
     {                                                                          \
         uint array_index = get_B_register(INS);                                \
         if (array_index != 0) {                                                \
             arrays[0] = arrays[array_index];                                   \
+            arrays[0].push_back(0);                                            \
             instruction_ptr = arrays[0].data();                                \
         }                                                                      \
         counter = get_C_register(INS);                                         \
+        continue;                                                              \
     }
 
 
