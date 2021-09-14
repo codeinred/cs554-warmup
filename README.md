@@ -30,3 +30,20 @@ Alternatively, running `./package.sh` will invoke the above command before
 copying everything into a newly created `package` directory inside the root of
 the project. This `package` directory will contain both the executable, and
 the list of sample programs that can be run.
+
+## Running
+
+In order to run one of the sample programs, do:
+```bash
+build/execute programs/<your program>
+```
+For example, to run sandmark,
+```bash
+build/execute programs/sandmark
+```
+
+This operation may also be timed:
+```bash
+time build/execute programs/sandmark
+```
+
