@@ -47,3 +47,8 @@ This operation may also be timed:
 time build/execute programs/sandmark
 ```
 
+Alternatively, you can try one of the pre-built binaries in the `binaries` directory:
+```bash
+time binaries/execute programs/sandmark
+```
+
