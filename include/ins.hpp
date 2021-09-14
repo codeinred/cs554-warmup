@@ -11,8 +11,8 @@ constexpr uint get_section_of_bits(uint input) {
     static_assert(0 <= end && end <= 31, "end should be between 0 and 31");
     static_assert(start < end, "start should be smaller than end");
 
-    uint num_to_get = end - start + 1;
-    uint mask = (1 << num_to_get) - 1;
+    constexpr uint num_to_get = end - start + 1;
+    constexpr uint mask = (1 << num_to_get) - 1;
     return (input >> start) & mask;
 }
 struct instruction {
