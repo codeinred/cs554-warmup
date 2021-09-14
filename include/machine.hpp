@@ -23,9 +23,7 @@ class machine {
     std::vector<uint> deallocated;
     std::array<uint, 8> registers {};
 
-    void print_char(char c) {
-        putchar(c);
-    }
+    void print_char(char c) { putchar(c); }
 
    public:
     machine() = default;
@@ -54,17 +52,13 @@ class machine {
         } else {
             uint index = deallocated.back();
             deallocated.pop_back();
-            arrays[index] = word_array(size, 0);
+            arrays[index].resize(size, 0);
             return index;
         }
     }
     void deallocate(uint index) {
-        if (index == arrays.size() - 1) {
-            arrays.pop_back();
-        } else {
-            arrays[index] = word_array();
-            deallocated.push_back(index);
-        }
+        arrays[index].clear();
+        deallocated.push_back(index);
     }
     uint get_A_register(instruction i) const { return registers[i.get_A()]; }
     uint get_B_register(instruction i) const { return registers[i.get_B()]; }
@@ -122,7 +116,7 @@ class machine {
                     // plus the value in register C, modulo 2^32.
 
                     set_A_register(i, (get_B_register(i) + get_C_register(i)));
-                 } break;
+                } break;
                 case 4:
                     // Opcode 4: The register A receives the value in register B
                     // times the value in register C, modulo 2^32
