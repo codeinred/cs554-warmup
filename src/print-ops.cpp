@@ -1,4 +1,5 @@
 #include <files.hpp>
+#include <formatting.hpp>
 
 int main(int argc, char** argv) {
 

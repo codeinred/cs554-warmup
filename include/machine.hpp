@@ -1,10 +1,8 @@
 #pragma once
 
 #include <array>
-#include <fmt/core.h>
-#include <formatting.hpp>
 #include <ins.hpp>
-#include <iostream>
+#include <cstdio>
 #include <vector>
 
 namespace compiler {
@@ -24,6 +22,20 @@ class machine {
     array_space arrays;
     std::vector<uint> deallocated;
     std::array<uint, 8> registers {};
+    std::vector<unsigned char> buffer = std::vector<unsigned char>(4096);
+    size_t buffer_loc = 0;
+    void flush() {
+        fwrite(buffer.data(), 1, buffer_loc, stdout);
+        buffer_loc = 0;
+    }
+    void print_char(char c) {
+        if (buffer_loc == 4096) {
+            flush();
+        }
+        buffer[buffer_loc++] = c;
+        if (c == '\n')
+            flush();
+    }
 
    public:
     machine() = default;
@@ -82,14 +94,6 @@ class machine {
     }
     instruction get_instruction(uint counter) {
         return instruction {arrays[0][counter]};
-    }
-    void print_status(uint counter, instruction i) {
-        fmt::print(stderr, "{:<4}  ", counter);
-        fmt::print(stderr, "Ins: {:3}", i);
-        fmt::print(stderr, "  reg: {}", registers);
-        fmt::print(
-            stderr, "  arr: {}", std::vector(arrays.begin() + 1, arrays.end()));
-        fmt::print(stderr, "\n");
     }
     new_state run(uint counter) {
         instruction i = get_instruction(counter);
@@ -169,7 +173,7 @@ class machine {
                 // Opcode 10: Output. The value in the register C is displayed
                 // on the console. Only values in the range 0–255 are allowed.
 
-                fmt::print("{}", char(get_C_register(i)));
+                print_char(char(get_C_register(i)));
             } break;
             case 11: {
                 // Opcode 11: Input. The machine waits for input on the console.
@@ -177,7 +181,7 @@ class machine {
                 // which must be in the range 0–255. If the end of input has
                 // been signaled, then the register C is filled with all 1’s.
 
-                int ch = std::cin.get();
+                int ch = getchar();
                 if (ch == EOF) {
                     set_C_register(i, ~0u);
                 } else {

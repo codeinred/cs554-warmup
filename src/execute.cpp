@@ -1,4 +1,5 @@
 #include <files.hpp>
+#include <fmt/core.h>
 
 int main(int argc, char** argv) {
     namespace fs = std::filesystem;
