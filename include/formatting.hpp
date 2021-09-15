@@ -48,7 +48,7 @@ struct fmt::formatter<compiler::instruction> : fmt::formatter<uint32_t> {
     auto format(compiler::instruction i, FormatContext& ctx)
         -> decltype(ctx.out()) {
 
-        uint opcode = i.get_OP();
+        uint32_t opcode = i.get_OP();
 
         switch (opcode) {
             case 0:
