@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
         // fmt::print("Running '{}'\n", filename.c_str());
         // Run the machine
-        m.run_loop();
+        m.run_loop_vectorized();
     } else {
         fmt::print("Couldn't find '{}'\n", filename.c_str());
     }
