@@ -8,6 +8,8 @@ set(project_name cs554_warmup)
 set(libname "${project_name}")
 project(${project_name} CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
 include("${CMAKE_CURRENT_SOURCE_DIR}/helper.cmake")
 
 ###################################
@@ -16,8 +18,6 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/helper.cmake")
 
 # Add library and register compile options
 add_library(${libname} INTERFACE)
-
-target_cpp_20(${libname})
 
 target_include_directories(
     ${libname}
