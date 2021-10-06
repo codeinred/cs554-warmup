@@ -7,7 +7,8 @@ using uint = uint32_t;
 template <int start, int end>
 constexpr uint get_section_of_bits(uint input) {
     static_assert(
-        0 <= start && start <= 31, "start should be between 0 and 31");
+        0 <= start && start <= 31,
+        "start should be between 0 and 31");
     static_assert(0 <= end && end <= 31, "end should be between 0 and 31");
     static_assert(start < end, "start should be smaller than end");
 
@@ -32,5 +33,6 @@ struct instruction {
 
 
 static_assert(
-    instruction {0xf0000000u}.get_OP() == 0xf, "get_OP() not working");
+    instruction {0xf0000000u}.get_OP() == 0xf,
+    "get_OP() not working");
 } // namespace compiler

@@ -21,11 +21,11 @@ int main(int argc, char** argv) {
     // Execute the file as a program if it exists.
     if (fs::exists(filename)) {
 
-        std::vector<uint> instructions =
-            read_words_from_bytes(read_all_bytes(filename));
+        std::vector<uint> instructions = read_words_from_bytes(
+            read_all_bytes(filename));
 
-        for(uint i : instructions) {
-            fmt::print("{}\n", instruction{i});
+        for (uint i : instructions) {
+            fmt::print("{}\n", instruction {i});
         }
     } else {
         fmt::print("Couldn't find '{}'\n", filename.c_str());

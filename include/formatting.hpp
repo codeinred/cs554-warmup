@@ -33,7 +33,11 @@ struct fmt::formatter<compiler::instruction> : fmt::formatter<uint32_t> {
     }
     void print_c(auto& ctx, instruction i, std::string_view hint) {
         fmt::format_to(
-            ctx.out(), "{} C={}\t\t(op {})", hint, i.get_C(), i.get_OP());
+            ctx.out(),
+            "{} C={}\t\t(op {})",
+            hint,
+            i.get_C(),
+            i.get_OP());
     }
     void print_special(auto& ctx, instruction i, std::string_view hint) {
         fmt::format_to(
